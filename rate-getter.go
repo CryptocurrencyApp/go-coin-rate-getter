@@ -10,7 +10,7 @@ import (
 )
 
 type Response struct {
-	GatedAt  time.Time
+	GetAt    time.Time
 	InfoList []CoinInfo
 }
 
@@ -33,7 +33,7 @@ func Access() Response {
 	rawResult := request()
 
 	response := Response{
-		GatedAt:  time.Now(),
+		GetAt:    time.Now(),
 		InfoList: []CoinInfo{},
 	}
 
