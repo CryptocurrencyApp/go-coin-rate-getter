@@ -11,7 +11,7 @@ import (
 
 type Response struct {
 	GatedAt  time.Time
-	infoList []CoinInfo
+	InfoList []CoinInfo
 }
 
 type CoinInfo struct {
@@ -34,10 +34,10 @@ func Access() Response {
 
 	response := Response{
 		GatedAt:  time.Now(),
-		infoList: []CoinInfo{},
+		InfoList: []CoinInfo{},
 	}
 
-	if err := json.Unmarshal(rawResult, &response.infoList); err != nil {
+	if err := json.Unmarshal(rawResult, &response.InfoList); err != nil {
 		panic(err)
 	}
 
