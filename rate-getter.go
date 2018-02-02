@@ -36,6 +36,7 @@ func createOption() url.Values {
 	value := url.Values{}
 	value.Add("start", "1")
 	value.Add("limit", string(coinTypeCount))
+	value.Add("convert", "JPY")
 
 	return value
 }
