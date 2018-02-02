@@ -4,21 +4,47 @@ import (
 	"net/url"
 	"net/http"
 	"io/ioutil"
-	"fmt"
+	"time"
+	"encoding/json"
+	"strconv"
 )
 
-type response struct {
+type Response struct {
+	GatedAt  time.Time
+	infoList []CoinInfo
 }
 
-const baseUrl = "https://api.coinmarketcap.com/v1/ticker"
+type CoinInfo struct {
+	Id               string      `json:"id"`
+	Name             string      `json:"name"`
+	Symbol           string      `json:"symbol"`
+	PriceUsd         json.Number `json:"price_usd"`
+	PriceJpy         json.Number `json:"price_jpy"`
+	PriceBtc         json.Number `json:"price_btc"`
+	PercentChange1h  json.Number `json:"percent_change_1h"`
+	PercentChange24h json.Number `json:"percent_change_24h"`
+	PercentChange7d  json.Number `json:"percent_change_7d"`
+}
+
+const baseUrl = "https://api.coinmarketcap.com/v1/ticker/"
 const coinTypeCount = 300
 
-func Access() {
-	result := request()
-	fmt.Println(result)
+func Access() Response {
+	rawResult := request()
+
+	response := Response{
+		GatedAt:  time.Now(),
+		infoList: []CoinInfo{},
+	}
+
+	if err := json.Unmarshal(rawResult, &response.infoList); err != nil {
+		panic(err)
+	}
+
+	return response
 }
 
-func request() string {
+func request() []byte {
 	option := createOption()
 
 	resp, err := http.Get(baseUrl + "?" + option.Encode())
@@ -26,16 +52,19 @@ func request() string {
 		panic(err)
 	}
 
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
 
 	defer resp.Body.Close()
-	return string(result)
+	return result
 }
 
 func createOption() url.Values {
 	value := url.Values{}
 	value.Add("start", "1")
-	value.Add("limit", string(coinTypeCount))
+	value.Add("limit", strconv.Itoa(coinTypeCount))
 	value.Add("convert", "JPY")
 
 	return value

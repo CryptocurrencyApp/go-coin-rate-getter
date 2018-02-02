@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
+
 	getter "github.com/CryptocurrencyApp/go-coin-rate-getter"
 )
 
 func main() {
-	getter.Access()
+	response := getter.Access()
+	fmt.Println(response)
 }
