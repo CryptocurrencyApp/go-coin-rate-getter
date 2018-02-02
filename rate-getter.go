@@ -63,7 +63,7 @@ func request() []byte {
 
 func createOption() url.Values {
 	value := url.Values{}
-	value.Add("start", "1")
+	value.Add("start", "0")
 	value.Add("limit", strconv.Itoa(coinTypeCount))
 	value.Add("convert", "JPY")
 
