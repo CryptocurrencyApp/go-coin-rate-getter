@@ -3,7 +3,9 @@ package rate_getter
 import (
 	"net/url"
 	"net/http"
+	"io"
 	"io/ioutil"
+	"os"
 	"time"
 	"encoding/json"
 	"strconv"
@@ -34,7 +36,7 @@ func Access() Response {
 
 	response := Response{
 		GetAt:    time.Now(),
-		InfoList: []CoinInfo{},
+		InfoList: nil,
 	}
 
 	if err := json.Unmarshal(rawResult, &response.InfoList); err != nil {
@@ -42,6 +44,48 @@ func Access() Response {
 	}
 
 	return response
+}
+
+func Archive() error {
+	// Open source file
+	srcPath := "./ratelog/newest/newest.json"
+
+	srcFile, err := os.Open(srcPath)
+	if err != nil {
+		return err
+	}
+
+	bytes, err := ioutil.ReadAll(srcFile)
+	if err != nil {
+		return err
+	}
+
+	// newest/newest.jsonの中身が空の場合（初めてのアクセスの時）はスルーする
+	if len(bytes) == 0 {
+		return nil
+	}
+
+	result := Response{}
+	if err := json.Unmarshal(bytes, &result); err != nil {
+		return err
+	}
+	defer srcFile.Close()
+
+	// Open destination file
+	dstPath := "./ratelog/archive/" + result.GetAt.Format(time.RFC3339) + ".json"
+	dstFile, err := os.Create(dstPath)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+
+	// Copy
+	_, err = io.Copy(dstFile, srcFile)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func request() []byte {

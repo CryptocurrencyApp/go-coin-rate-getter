@@ -19,6 +19,10 @@ func main() {
 		panic(err)
 	}
 
+	if err := getter.Archive(); err != nil {
+		panic(err)
+	}
+
 	newestResponse, err := json.Marshal(response)
 	if err != nil {
 		panic(err)

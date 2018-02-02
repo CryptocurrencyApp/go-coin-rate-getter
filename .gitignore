@@ -4,3 +4,4 @@
 vender/
 
 ratelog/newest/newest.json
+ratelog/archive/*.json
