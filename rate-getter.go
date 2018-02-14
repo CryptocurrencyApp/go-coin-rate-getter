@@ -48,7 +48,7 @@ func Access() Response {
 
 func Archive() error {
 	// Open source file
-	srcPath := "./ratelog/newest/newest.json"
+	srcPath := "/home/ubuntu/ratelog/newest/newest.json"
 
 	srcFile, err := os.Open(srcPath)
 	if err != nil {
@@ -72,7 +72,7 @@ func Archive() error {
 	defer srcFile.Close()
 
 	// Open destination file
-	dstPath := "./ratelog/archive/" + result.GetAt.Format(time.RFC3339) + ".json"
+	dstPath := "/home/ubuntu/ratelog/archive/" + result.GetAt.Format(time.RFC3339) + ".json"
 	dstFile, err := os.Create(dstPath)
 	if err != nil {
 		return err

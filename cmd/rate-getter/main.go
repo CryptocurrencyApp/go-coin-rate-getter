@@ -9,11 +9,11 @@ import (
 	getter "github.com/CryptocurrencyApp/go-coin-rate-getter"
 )
 
-const newestResultFilePath = "./ratelog/newest/newest.json"
+const newestResultFilePath = "/home/ubuntu/ratelog/newest/newest.json"
 
 func main() {
 	response := getter.Access()
-
+	fmt.Println(newestResultFilePath)
 	newestFile, err := os.OpenFile(newestResultFilePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		panic(err)
